@@ -33,76 +33,104 @@ using System.Collections.Generic;
 
 namespace PoorMansTSqlFormatterTests
 {
-    [TestFixture]
-    public class TSqlStandardFormatterTests
+  [TestFixture]
+  public class TSqlStandardFormatterTests
+  {
+    ISqlTokenizer _tokenizer;
+    ISqlTokenParser _parser;
+    Dictionary<string, TSqlStandardFormatter> _formatters;
+
+    public TSqlStandardFormatterTests()
     {
-        ISqlTokenizer _tokenizer;
-        ISqlTokenParser _parser;
-        Dictionary<string, TSqlStandardFormatter> _formatters;
-
-        public TSqlStandardFormatterTests()
-        {
-            _tokenizer = new TSqlStandardTokenizer();
-            _parser = new TSqlStandardParser();
-            _formatters = new Dictionary<string, TSqlStandardFormatter>(StringComparer.OrdinalIgnoreCase);
-        }
-
-        private TSqlStandardFormatter GetFormatter(string configString)
-        {
-            TSqlStandardFormatter outFormatter;
-            if (!_formatters.TryGetValue(configString, out outFormatter))
-            {
-                var options = new TSqlStandardFormatterOptions(configString);
-                outFormatter = new TSqlStandardFormatter(options);
-                _formatters.Add(configString, outFormatter);
-            }
-            return outFormatter;
-        }
-
-        [Test, TestCaseSource(typeof(Utils), "GetInputSqlFileNames")]
-        public void StandardFormatReparsingReformatting(string FileName)
-        {
-            string inputSQL = Utils.GetTestFileContent(FileName, Utils.INPUTSQLFOLDER);
-            TSqlStandardFormatter _treeFormatter = GetFormatter("");
-            ITokenList tokenized = _tokenizer.TokenizeSQL(inputSQL);
-            Node parsed = _parser.ParseSQL(tokenized);
-            string outputSQL = _treeFormatter.FormatSQLTree(parsed);
-
-            var inputToSecondPass = outputSQL;
-            if (inputToSecondPass.StartsWith(Utils.ERROR_FOUND_WARNING))
-                inputToSecondPass = inputToSecondPass.Replace(Utils.ERROR_FOUND_WARNING, "");
-
-            ITokenList tokenizedAgain = _tokenizer.TokenizeSQL(inputToSecondPass);
-            Node parsedAgain = _parser.ParseSQL(tokenizedAgain);
-            string formattedAgain = _treeFormatter.FormatSQLTree(parsedAgain);
-
-            if (!inputSQL.Contains(Utils.REFORMATTING_INCONSISTENCY_WARNING))
-            {
-                Assert.AreEqual(outputSQL, formattedAgain, "first-pass formatted vs reformatted");
-                Utils.StripWhiteSpaceFromSqlTree(parsed);
-                Utils.StripWhiteSpaceFromSqlTree(parsedAgain);
-                Assert.AreEqual(parsed.ToXmlDoc().OuterXml.ToUpper(), parsedAgain.ToXmlDoc().OuterXml.ToUpper(), "first parse xml vs reparse xml");
-            }
-        }
-
-        public IEnumerable<string> GetStandardFormatSqlFileNames()
-        {
-            return Utils.FolderFileNameIterator(Utils.GetTestContentFolder("StandardFormatSql"));
-        }
-
-        [Test, TestCaseSource("GetStandardFormatSqlFileNames")]
-        public void StandardFormatExpectedOutput(string FileName)
-        {
-            string expectedSql = Utils.GetTestFileContent(FileName, Utils.STANDARDFORMATSQLFOLDER);
-            string inputSql = Utils.GetTestFileContent(Utils.StripFileConfigString(FileName), Utils.INPUTSQLFOLDER);
-            TSqlStandardFormatter _treeFormatter = GetFormatter(Utils.GetFileConfigString(FileName));
-
-            ITokenList tokenized = _tokenizer.TokenizeSQL(inputSql);
-            Node parsed = _parser.ParseSQL(tokenized);
-            string formatted = _treeFormatter.FormatSQLTree(parsed);
-
-            Assert.AreEqual(expectedSql, formatted);
-        }
-
+      _tokenizer = new TSqlStandardTokenizer();
+      _parser = new TSqlStandardParser();
+      _formatters = new Dictionary<string, TSqlStandardFormatter>(StringComparer.OrdinalIgnoreCase);
     }
+
+    private TSqlStandardFormatter GetFormatter(string configString)
+    {
+      TSqlStandardFormatter outFormatter;
+      if (!_formatters.TryGetValue(configString, out outFormatter))
+      {
+        //var options = new TSqlStandardFormatterOptions
+        //{
+        //  KeywordStandardization = true,
+        //  IndentString = "\t",
+        //  SpacesPerTab = 4,
+        //  MaxLineWidth = 999,
+        //  NewStatementLineBreaks = 2,
+        //  NewClauseLineBreaks = 1,
+        //  TrailingCommas = false,
+        //  SpaceAfterExpandedComma = false,
+        //  ExpandBetweenConditions = true,
+        //  ExpandBooleanExpressions = true,
+        //  ExpandCaseStatements = true,
+        //  ExpandCommaLists = true,
+        //  BreakJoinOnSections = false,
+        //  UppercaseKeywords = true,
+        //  ExpandInLists = true
+        //};
+
+        var options = new TSqlStandardFormatterOptions(configString);
+        options.IndentString = new String(' ', 2);
+        options.TrailingCommas = true;
+        options.ExpandInLists = true;
+        //options.NewStatementLineBreaks = 2;
+        outFormatter = new TSqlStandardFormatter(options);
+        _formatters.Add(configString, outFormatter);
+      }
+
+      return outFormatter;
+    }
+
+    [Test, TestCaseSource(typeof(Utils), "GetInputSqlFileNames")]
+    public void StandardFormatReparsingReformatting(string FileName)
+    {
+      string inputSQL = Utils.GetTestFileContent(FileName, Utils.INPUTSQLFOLDER);
+      TSqlStandardFormatter _treeFormatter = GetFormatter("");
+      ITokenList tokenized = _tokenizer.TokenizeSQL(inputSQL);
+      Node parsed = _parser.ParseSQL(tokenized);
+      string outputSQL = _treeFormatter.FormatSQLTree(parsed);
+
+      var inputToSecondPass = outputSQL;
+      if (inputToSecondPass.StartsWith(Utils.ERROR_FOUND_WARNING))
+        inputToSecondPass = inputToSecondPass.Replace(Utils.ERROR_FOUND_WARNING, "");
+
+      ITokenList tokenizedAgain = _tokenizer.TokenizeSQL(inputToSecondPass);
+      Node parsedAgain = _parser.ParseSQL(tokenizedAgain);
+      string formattedAgain = _treeFormatter.FormatSQLTree(parsedAgain);
+
+      if (!inputSQL.Contains(Utils.REFORMATTING_INCONSISTENCY_WARNING))
+      {
+        Assert.AreEqual(outputSQL, formattedAgain, "first-pass formatted vs reformatted");
+        Utils.StripWhiteSpaceFromSqlTree(parsed);
+        Utils.StripWhiteSpaceFromSqlTree(parsedAgain);
+        Assert.AreEqual(parsed.ToXmlDoc().OuterXml.ToUpper(), parsedAgain.ToXmlDoc().OuterXml.ToUpper(), "first parse xml vs reparse xml");
+      }
+    }
+
+    public IEnumerable<string> GetStandardFormatSqlFileNames()
+    {
+      Utils.SortFileName = false;
+      var results = Utils.FolderFileNameIterator(Utils.GetTestContentFolder("StandardFormatSql"));
+      return results;
+    }
+
+    [Test, TestCaseSource(typeof(Utils), nameof(Utils.GetInputSqlFileNames))]
+    public void StandardFormatExpectedOutput(string fileName)
+    {
+      //string expectedSql = Utils.GetTestFileContent(fileName, Utils.STANDARDFORMATSQLFOLDER);
+
+      
+      string inputSql = Utils.GetTestFileContent(Utils.StripFileConfigString(fileName), Utils.INPUTSQLFOLDER);
+      TSqlStandardFormatter treeFormatter = GetFormatter(Utils.GetFileConfigString(fileName));
+      treeFormatter.Debug = false;
+      ITokenList tokenized = _tokenizer.TokenizeSQL(inputSql);
+      Node parsed = _parser.ParseSQL(tokenized);
+      string formatted = treeFormatter.FormatSQLTree(parsed);
+      // System.Diagnostics.Debug.WriteLine(formatted);
+      Utils.WriteTestFileContent($"formatted-{fileName}", Utils.STANDARDFORMATSQLFOLDER, formatted);
+      //Assert.AreEqual(expectedSql, formatted);
+    }
+  }
 }

@@ -1,24 +1,34 @@
-﻿CREATE TRIGGER TestTrigger ON TestTable
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+CREATE TRIGGER TestTrigger ON TestTable
 AFTER INSERT
 AS
-DECLARE @OneThing TINYINT
-	,@AnotherThing INT;
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 
-IF EXISTS (
-		SELECT *
-		FROM SomeTable p
-		JOIN inserted AS i ON p.SomeID = i.SomeID
-		JOIN OtherTable AS v ON v.OtherID = p.OtherID
-		WHERE v.SomeValue = 5
-		)
+DECLARE
+  @OneThing TINYINT,
+  @AnotherThing INT;
+
+IF EXISTS
+(
+  SELECT
+    *
+  FROM SomeTable p
+  JOIN inserted AS i
+    ON i.SomeID = p.SomeID
+  JOIN OtherTable AS v
+    ON v.OtherID = p.OtherID
+  WHERE v.SomeValue = 5
+)
 BEGIN
-	RAISERROR (
-			'Something bad happened, sorry.'
-			,16
-			,1
-			);
+  RAISERROR
+    (
+      'Something bad happened, sorry.',
+      16,
+      1
+    );
 
-	ROLLBACK TRANSACTION;
+  ROLLBACK TRANSACTION;
 
-	RETURN
+  RETURN
 END;

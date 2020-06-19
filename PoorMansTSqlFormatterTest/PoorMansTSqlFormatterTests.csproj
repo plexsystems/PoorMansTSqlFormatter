@@ -80,6 +80,7 @@
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Data\InputSql\00_BasicTest.txt" />
     <Content Include="Data\InputSql\10_SetOperators_Union.txt" />
     <Content Include="Data\InputSql\11_MSAccess_Pasted.txt" />
     <Content Include="Data\InputSql\12_NestedIfElse.txt" />
@@ -109,6 +110,14 @@
     <Content Include="Data\InputSql\27_OtherSqlFlavourSupport.txt" />
     <Content Include="Data\InputSql\28_BadNestingDontCrash.txt" />
     <Content Include="Data\InputSql\29_Special_Regions.txt" />
+    <Content Include="Data\InputSql\30_Result_API_Add.txt" />
+    <Content Include="Data\InputSql\31_Result_API_Update.txt" />
+    <Content Include="Data\InputSql\32_Line_Item_Document_Get_Blanket.txt" />
+    <Content Include="Data\InputSql\33_CommentInDeclare.txt" />
+    <Content Include="Data\InputSql\34_Parenthesis.txt" />
+    <Content Include="Data\InputSql\35_Line_Item_Document_Get_Blanket.txt" />
+    <Content Include="Data\InputSql\36_IfThenBegin.txt" />
+    <Content Include="Data\ParsedSql\00_BasicTest.txt" />
     <Content Include="Data\ParsedSql\01_SimpleTypes_StrangeRules.txt" />
     <Content Include="Data\ParsedSql\03_SimpleSelect_MS.txt" />
     <Content Include="Data\ParsedSql\04_MiscProceduralSample_Unstructured.txt" />
@@ -132,6 +141,14 @@
     <Content Include="Data\ParsedSql\11_MSAccess_Pasted.txt" />
     <Content Include="Data\ParsedSql\27_OtherSqlFlavourSupport.txt" />
     <Content Include="Data\ParsedSql\29_Special_Regions.txt" />
+    <Content Include="Data\ParsedSql\30_Result_API_Add.txt" />
+    <Content Include="Data\ParsedSql\31_Result_API_Update.txt" />
+    <Content Include="Data\ParsedSql\32_Line_Item_Document_Get_Blanket.txt" />
+    <Content Include="Data\ParsedSql\33_CommentInDeclare.txt" />
+    <Content Include="Data\ParsedSql\34_Parenthesis.txt" />
+    <Content Include="Data\ParsedSql\35_Line_Item_Document_Get_Blanket.txt" />
+    <Content Include="Data\ParsedSql\36_IfThenBegin.txt" />
+    <Content Include="Data\StandardFormatSql\00_BasicTest.txt" />
     <Content Include="Data\StandardFormatSql\01_SimpleTypes_StrangeRules.txt" />
     <Content Include="Data\StandardFormatSql\03_SimpleSelect_MS.txt" />
     <Content Include="Data\StandardFormatSql\04_MiscProceduralSample_Unstructured.txt" />
@@ -164,6 +181,13 @@
     <Content Include="Data\StandardFormatSql\05_ComplexDDL%28NewClauseLineBreaks=2,NewStatementLineBreaks=3%29.txt" />
     <Content Include="Data\StandardFormatSql\28_BadNestingDontCrash.txt" />
     <Content Include="Data\StandardFormatSql\29_Special_Regions.txt" />
+    <Content Include="Data\StandardFormatSql\30_Result_API_Add.txt" />
+    <Content Include="Data\StandardFormatSql\31_Result_API_Update.txt" />
+    <Content Include="Data\StandardFormatSql\32_Line_Item_Document_Get_Blanket.txt" />
+    <Content Include="Data\StandardFormatSql\33_CommentInDeclare.txt" />
+    <Content Include="Data\StandardFormatSql\34_Parenthesis.txt" />
+    <Content Include="Data\StandardFormatSql\35_Line_Item_Document_Get_Blanket.txt" />
+    <Content Include="Data\StandardFormatSql\36_IfThenBegin.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PoorMansTSqlFormatterLib\PoorMansTSqlFormatterLib.csproj">

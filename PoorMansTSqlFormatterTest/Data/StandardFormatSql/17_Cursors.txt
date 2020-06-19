@@ -1,73 +1,81 @@
-﻿USE master;
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+USE master;
 GO
 
-DECLARE @Test INT
+DECLARE
+  @Test INT;
 
 DECLARE Test$Me SCROLL CURSOR
 FOR
-SELECT 1 AS One
-FOR READ ONLY
+SELECT
+  1 AS One
+FOR READ ONLY;
 
-OPEN Test$Me
+OPEN Test$Me;
 
 FETCH NEXT
 FROM Test$Me
-INTO @Test
+INTO @Test;
 
 WHILE @@FETCH_STATUS = 0
 BEGIN
-	PRINT 'I was here!'
+  PRINT 'I was here!';
 
-	FETCH NEXT
-	FROM Test$Me
-	INTO @Test
-END
+  FETCH NEXT
+  FROM Test$Me
+  INTO @Test
+END;
 
-CLOSE Test$Me
+CLOSE Test$Me;
 
-DEALLOCATE Test$Me
+DEALLOCATE Test$Me;
 GO
 
-CREATE TABLE #CursorFodder (
-	One INT
-	,Two INT
-	)
+CREATE TABLE #CursorFodder
+(
+  One INT,
+  Two INT
+);
 
-SET NOCOUNT ON
+SET NOCOUNT ON;
 
 INSERT INTO #CursorFodder
-VALUES (
-	1
-	,2
-	)
+VALUES
+(
+  1,
+  2
+);
 
-SET NOCOUNT OFF
+SET NOCOUNT OFF;
 
-DECLARE @Test2 INT
+DECLARE
+  @Test2 INT;
 
 DECLARE Test$Me_Again_François CURSOR OPTIMISTIC
 FOR
-SELECT One
+SELECT
+  One
 FROM #CursorFodder
-FOR UPDATE OF One
+FOR UPDATE OF One;
 
-OPEN Test$Me_Again_François
+OPEN Test$Me_Again_François;
 
 FETCH NEXT
 FROM Test$Me_Again_François
-INTO @Test2
+INTO @Test2;
 
 WHILE @@FETCH_STATUS = 0
 BEGIN
-	PRINT 'I was here!'
+  PRINT 'I was here!';
 
-	FETCH NEXT
-	FROM Test$Me_Again_François
-	INTO @Test2
-END
+  FETCH NEXT
+  FROM Test$Me_Again_François
+  INTO @Test2
+END;
 
-CLOSE Test$Me_Again_François
+CLOSE Test$Me_Again_François;
 
-DEALLOCATE Test$Me_Again_François
+DEALLOCATE Test$Me_Again_François;
 
-DROP TABLE #CursorFodder
+DROP TABLE #CursorFodder;

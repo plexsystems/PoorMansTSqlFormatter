@@ -129,6 +129,22 @@ namespace PoorMansTSqlFormatterLib.ParseStructure
         {
             return value.ChildrenByName(name).SingleOrDefault();
         }
+        public static List<Node> RestOfSiblings(this Node value)
+        {
+          var siblings = new List<Node>();
+          if (value == null || value.Parent == null)
+            return siblings;
+          var nextSibling = value.NextSibling();
+          while (nextSibling != null)
+          {
+            nextSibling = nextSibling.NextSibling();
+            if (nextSibling!=null)
+            {
+              siblings.Add(nextSibling);
+            }
+          }
+          return siblings;
+        }
 
         public static Node ChildByNames(this Node value, IEnumerable<string> names)
         {
@@ -218,5 +234,28 @@ namespace PoorMansTSqlFormatterLib.ParseStructure
             return remainder;
         }
 
+        public static List<Node> SiblingsAfterChild(this Node value, Node fromChild)
+        {
+          List<Node> siblings = new List<Node>();
+          if (value == null)
+            return null;
+
+          if (fromChild == null)
+            throw new ArgumentNullException("fromChild");
+
+          bool targetFound = false;
+          foreach (var child in value.Parent.Children)
+          {
+            if (targetFound)
+            {
+              siblings.Add(child);
+            }
+            else if (child == fromChild)
+            {
+              targetFound = true;
+            }
+          }
+          return siblings;
+        }
     }
 }

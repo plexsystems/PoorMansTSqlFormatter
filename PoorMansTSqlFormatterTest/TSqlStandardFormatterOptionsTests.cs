@@ -39,8 +39,8 @@ namespace PoorMansTSqlFormatterTests
         {
             var options = new TSqlStandardFormatterOptions();
 
-            Assert.AreEqual("\t", options.IndentString);
-            Assert.AreEqual(4, options.SpacesPerTab);
+            Assert.AreEqual(" ", options.IndentString);
+            Assert.AreEqual(2, options.SpacesPerTab);
             Assert.AreEqual(999, options.MaxLineWidth);
             Assert.IsTrue(options.ExpandCommaLists);
             Assert.IsFalse(options.TrailingCommas);

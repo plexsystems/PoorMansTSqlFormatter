@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace PoorMansTSqlFormatterLib.ParseStructure
 {
@@ -33,6 +34,7 @@ namespace PoorMansTSqlFormatterLib.ParseStructure
         }
 
         public string Name { get; set; }
+        public static Regex BreakMatch { get; } = new Regex(@"(\r|\n)+");
         public string TextValue { get; set; }
         public Node Parent { get; set; }
 
@@ -50,6 +52,20 @@ namespace PoorMansTSqlFormatterLib.ParseStructure
             SetParentOnChild(newChild);
             var childList = Children as IList<Node>;
             childList.Insert(childList.IndexOf(existingChild), newChild);
+        }
+
+        public void InsertChildAfter(Node newChild, Node existingChild)
+        {
+          SetParentOnChild(newChild);
+          var childList = Children as IList<Node>;
+          childList.Insert(childList.IndexOf(existingChild)+1, newChild);
+        }
+
+        public void InsertChildAtIndex(Node newChild, int index)
+        {
+          SetParentOnChild(newChild);
+          var childList = Children as IList<Node>;
+          childList.Insert(index, newChild);
         }
 
         private void SetParentOnChild(Node child)

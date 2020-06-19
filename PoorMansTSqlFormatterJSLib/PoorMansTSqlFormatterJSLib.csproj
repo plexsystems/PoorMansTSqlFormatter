@@ -37,6 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\PoorMansTSqlFormatterLib\_Inlined\PoorMansTSqlFormatterLibShared\Formatters\PlexFormatter.cs">
+      <Link>_Inlined\PoorMansTSqlFormatterLibShared\Formatters\PlexFormatter.cs</Link>
+    </Compile>
     <Compile Include="HTML5Demo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\PoorMansTSqlFormatterLibShared\**\*.cs">

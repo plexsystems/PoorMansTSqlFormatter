@@ -29,90 +29,107 @@ using PoorMansTSqlFormatterLib.ParseStructure;
 
 namespace PoorMansTSqlFormatterTests
 {
-    static class Utils
+  static class Utils
+  {
+    public const string DATAFOLDER = "Data";
+    //public const string INPUTSQLFOLDER = "InputSql";
+    //public const string PARSEDSQLFOLDER = "ParsedSql";
+    //public const string STANDARDFORMATSQLFOLDER = "StandardFormatSql";
+    public const string INPUTSQLFOLDER = @"C:\Workbench\ID\Source";
+    public const string PARSEDSQLFOLDER = @"C:\Workbench\ID\Dest";
+    public const string STANDARDFORMATSQLFOLDER = "StandardFormatSql";
+
+    public const string INVALID_SQL_WARNING = "THIS TEST FILE IS NOT VALID SQL"; //currently unused, could be used for special exceptions
+    public const string REFORMATTING_INCONSISTENCY_WARNING = "KNOWN SQL REFORMATTING INCONSISTENCY";
+    public const string ERROR_FOUND_WARNING = "--WARNING! ERRORS ENCOUNTERED DURING SQL PARSING!\r\n"; //repeated wrt constant in the library, intentionally.
+
+    public static bool SortFileName = false;
+    public static string GetTestContentFolder(string folderName)
     {
-        public const string DATAFOLDER = "Data";
-        public const string INPUTSQLFOLDER = "InputSql";
-        public const string PARSEDSQLFOLDER = "ParsedSql";
-        public const string STANDARDFORMATSQLFOLDER = "StandardFormatSql";
-
-        public const string INVALID_SQL_WARNING = "THIS TEST FILE IS NOT VALID SQL"; //currently unused, could be used for special exceptions
-        public const string REFORMATTING_INCONSISTENCY_WARNING = "KNOWN SQL REFORMATTING INCONSISTENCY";
-        public const string ERROR_FOUND_WARNING = "--WARNING! ERRORS ENCOUNTERED DURING SQL PARSING!\r\n"; //repeated wrt constant in the library, intentionally.
-
-        public static string GetTestContentFolder(string folderName)
-        {
-            DirectoryInfo thisDirectory = new DirectoryInfo(".");
-            return Path.Combine(Path.Combine(thisDirectory.Parent.Parent.FullName, DATAFOLDER), folderName);
-        }
-
-        public static IEnumerable<string> FolderFileNameIterator(string path)
-        {
-            DirectoryInfo textFileFolder = new DirectoryInfo(path);
-            foreach (FileInfo sampleFile in textFileFolder.GetFiles())
-            {
-                yield return sampleFile.Name;
-            }
-        }
-
-        public static void StripWhiteSpaceFromSqlTree(Node sqlTree)
-        {
-            StripElementNamesFromXml(sqlTree, new[] { SqlStructureConstants.ENAME_WHITESPACE });
-        }
-
-        public static void StripCommentsFromSqlTree(Node sqlTree)
-        {
-            StripElementNamesFromXml(sqlTree, SqlStructureConstants.ENAMELIST_COMMENT);
-        }
-
-        private static void StripElementNamesFromXml(Node sqlTree, IEnumerable<string> elementNames)
-        {
-            var toRemove = sqlTree.ChildrenByNames(elementNames).ToList();
-            foreach (Node childThing in toRemove)
-                sqlTree.RemoveChild(childThing);
-
-            foreach (Node childThing in sqlTree.Children)
-                StripElementNamesFromXml(childThing, elementNames);
-        }
-
-        public static IEnumerable<string> GetInputSqlFileNames()
-        {
-            return FolderFileNameIterator(GetTestContentFolder("InputSql"));
-        }
-
-        public static string GetTestFileContent(string fileName, string testFolderPath)
-        {
-            return File.ReadAllText(Path.Combine(Utils.GetTestContentFolder(testFolderPath), fileName));
-        }
-
-        public static string StripFileConfigString(string fileName)
-        {
-            int openParens = fileName.IndexOf("(");
-            if (openParens >= 0)
-            {
-                int closeParens = fileName.IndexOf(")", openParens);
-                if (closeParens >= 0)
-                {
-                    return fileName.Substring(0, openParens) + fileName.Substring(closeParens + 1);
-                }
-                return fileName;
-            }
-            return fileName;
-        }
-
-        public static string GetFileConfigString(string fileName)
-        {
-            int openParens = fileName.IndexOf("(");
-            if (openParens >= 0)
-            {
-                int closeParens = fileName.IndexOf(")", openParens);
-                if (closeParens >= 0)
-                {
-                    return fileName.Substring(openParens + 1, (closeParens - openParens) - 1);
-                }
-                return "";
-            }
-            return "";
-        }
+      DirectoryInfo thisDirectory = new DirectoryInfo(".");
+      return Path.Combine(Path.Combine(thisDirectory.Parent.Parent.FullName, DATAFOLDER), folderName);
     }
+
+    public static IEnumerable<string> FolderFileNameIterator(string path)
+    {
+      DirectoryInfo textFileFolder = new DirectoryInfo(path);
+      List<string> fileList = new List<string>();
+      foreach (FileInfo sampleFile in textFileFolder.GetFiles())
+      {
+        fileList.Add(sampleFile.Name);
+      }
+      if (SortFileName)
+      {
+        return fileList.OrderByDescending(x => x).ToList();
+      }
+      else
+      {
+        return fileList;
+      }
+    }
+
+    public static void StripWhiteSpaceFromSqlTree(Node sqlTree)
+    {
+      StripElementNamesFromXml(sqlTree, new[] { SqlStructureConstants.ENAME_WHITESPACE });
+    }
+
+    public static void StripCommentsFromSqlTree(Node sqlTree)
+    {
+      StripElementNamesFromXml(sqlTree, SqlStructureConstants.ENAMELIST_COMMENT);
+    }
+
+    private static void StripElementNamesFromXml(Node sqlTree, IEnumerable<string> elementNames)
+    {
+      var toRemove = sqlTree.ChildrenByNames(elementNames).ToList();
+      foreach (Node childThing in toRemove)
+        sqlTree.RemoveChild(childThing);
+
+      foreach (Node childThing in sqlTree.Children)
+        StripElementNamesFromXml(childThing, elementNames);
+    }
+
+    public static IEnumerable<string> GetInputSqlFileNames()
+    {
+      return FolderFileNameIterator(GetTestContentFolder(@"C:\Workbench\ID\Source"));
+    }
+
+    public static string GetTestFileContent(string fileName, string testFolderPath)
+    {
+      return File.ReadAllText(Path.Combine(Utils.GetTestContentFolder(testFolderPath), fileName));
+    }
+    public static void WriteTestFileContent(string fileName, string testFolderPath, string fileContents)
+    {
+      File.WriteAllText(Path.Combine(Utils.GetTestContentFolder(testFolderPath), fileName), fileContents);
+    }
+
+    public static string StripFileConfigString(string fileName)
+    {
+      int openParens = fileName.IndexOf("(");
+      if (openParens >= 0)
+      {
+        int closeParens = fileName.IndexOf(")", openParens);
+        if (closeParens >= 0)
+        {
+          return fileName.Substring(0, openParens) + fileName.Substring(closeParens + 1);
+        }
+        return fileName;
+      }
+      return fileName;
+    }
+
+    public static string GetFileConfigString(string fileName)
+    {
+      int openParens = fileName.IndexOf("(");
+      if (openParens >= 0)
+      {
+        int closeParens = fileName.IndexOf(")", openParens);
+        if (closeParens >= 0)
+        {
+          return fileName.Substring(openParens + 1, (closeParens - openParens) - 1);
+        }
+        return "";
+      }
+      return "";
+    }
+  }
 }

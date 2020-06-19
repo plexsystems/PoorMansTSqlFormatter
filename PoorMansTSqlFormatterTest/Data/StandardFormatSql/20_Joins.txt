@@ -1,43 +1,61 @@
-﻿SELECT *
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+SELECT
+  *
 FROM Someplace S
-OUTER APPLY dbo.fn_GetAllPlaces(S.PlaceID)
+OUTER APPLY dbo.fn_GetAllPlaces(S.PlaceID);
 GO
 
-SELECT *
+SELECT
+  *
 FROM Someplace S
-JOIN Elsewhere ON 1 = 1
+JOIN Elsewhere
+  ON 1 = 1;
 GO
 
-SELECT *
+SELECT
+  *
 FROM Someplace S
-JOIN Elsewhere WITH (HOLDLOCK) ON 1 = 1
+JOIN Elsewhere WITH
+  (HOLDLOCK)
+  ON 1 = 1;
 GO
 
-SELECT *
+SELECT
+  *
 FROM Someplace S
-JOIN Elsewhere AS E(HOLDLOCK) ON 1 = 1
+JOIN Elsewhere AS E(HOLDLOCK)
+  ON 1 = 1;
 GO
 
-SELECT *
+SELECT
+  *
 FROM Someplace S
-INNER MERGE JOIN Elsewhere AS E ON 1 = 1
+INNER MERGE JOIN Elsewhere AS E
+  ON 1 = 1;
 GO
 
-SELECT *
+SELECT
+  *
 FROM Someplace S
-FULL OUTER JOIN Elsewhere AS E WITH (
-		HOLDLOCK
-		,INDEX (IX_TEST)
-		) ON 1 = 1
+FULL OUTER JOIN Elsewhere AS E WITH
+  (
+  HOLDLOCK,
+  INDEX(IX_TEST)
+  )
+  ON 1 = 1;
 GO
 
-SELECT *
+SELECT
+  *
 FROM Someplace S
-CROSS JOIN Elsewhere AS E ON 1 = 1
-OPTION (
-	LOOP JOIN
-	,FORCE ORDER
-	)
+CROSS JOIN Elsewhere AS E
+  ON 1 = 1
+OPTION
+(
+  LOOP JOIN,
+  FORCE ORDER
+);
 GO
 
 
