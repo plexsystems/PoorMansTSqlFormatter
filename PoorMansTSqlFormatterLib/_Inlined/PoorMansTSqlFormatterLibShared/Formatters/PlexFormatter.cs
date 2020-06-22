@@ -25,10 +25,10 @@ namespace PoorMansTSqlFormatterLib.Formatters
       ProcessState state = new ProcessState();
       var childList = new List<Node>(parentNode.Children);
       PreProcessChildren(ref childList, state);
-      if (state.ScriptOutsideOfProcedure && !state.IsTransactionIsolationSet)
-      {
-        parentNode.InsertChildAtIndex(CreateIsolationNode(), 0);
-      }
+      //if (state.ScriptOutsideOfProcedure && !state.IsTransactionIsolationSet)
+      //{
+      //  parentNode.InsertChildAtIndex(CreateIsolationNode(), 0);
+      //}
     }
     private static void PreProcessChildren(ref List<Node> children, ProcessState state)
     {
