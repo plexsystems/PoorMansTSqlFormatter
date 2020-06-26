@@ -1,0 +1,59 @@
+trigger:
+  - master
+
+pool: Plex Hosted VS2017
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.x'
+
+- task: PowerShell@2
+  displayName: Clean
+  inputs:
+    filePath: './build.ps1'
+    arguments: 'Clean --skip'
+
+- task: PowerShell@2
+  displayName: Restore
+  inputs:
+    filePath: './build.ps1'
+    arguments: 'Restore --skip'
+
+- task: PowerShell@2
+  displayName: Compile
+  inputs:
+    filePath: './build.ps1'
+    arguments: 'Compile --skip'
+
+- task: PowerShell@2
+  displayName: Test
+  inputs:
+    filePath: './build.ps1'
+    arguments: 'Test --skip'
+
+- task: PublishTestResults@2
+  displayName: Publish test results
+  inputs:
+    testResultsFormat: VSTest
+    testResultsFiles: 'TestResults/**/TestResults.xml'
+
+- task: PowerShell@2
+  displayName: 'Publish build output to folder'
+  inputs:
+    filePath: './build.ps1'
+    arguments: 'Publish --skip'
+
+- task: PowerShell@2
+  displayName: 'Build Chocolatey package'
+  inputs:
+    filePath: './build.ps1'
+    arguments: 'PublishChocolatey --skip'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  inputs:
+    pathToPublish: './publish'
+    artifactName: drop
