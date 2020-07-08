@@ -1,4 +1,3 @@
-using Microsoft.Build.Tasks;
 using Nuke.Common;
 using Nuke.Common.Execution;
 using Nuke.Common.Git;
@@ -7,10 +6,8 @@ using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.MSBuild;
-using Nuke.Common.Tools.NuGet;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.IO.FileSystemTasks;
-using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 [CheckBuildProjectConfigurations]
@@ -24,7 +21,6 @@ class Build : NukeBuild
   ///   - Microsoft VSCode           https://nuke.build/vscode
 
   public static int Main() => Execute<Build>(x => x.Publish);
-  //public static int Main() => Execute<Build>(x => x.Compile);
 
   [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
   readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -96,12 +92,28 @@ class Build : NukeBuild
     .DependsOn(Compile)
     .Executes(() =>
     {
-      // Copy SMSS Msi to output folder
       var msiSource = $"{Solution.GetProject("PoorMansTSqlFormatterSSMSPackage.Setup").Path.Parent}\\bin\\x86\\{Configuration}\\PoorMansTSqlFormatterSSMSPackage.Setup.msi";
+
+      // Get MD5 hash of SSMS Msi for Chocolatey
+      var smssHashfile = OutputDirectory / "PoorMansTSqlFormatterSSMSPackage.Setup.msi.hash";      
+      using (System.IO.StreamWriter file = new System.IO.StreamWriter(smssHashfile))
+      {
+        file.WriteLine(GetFileHash(msiSource));
+      }
+
+      // Copy SMSS Msi to output folder      
       CopyFileToDirectory(msiSource, OutputDirectory);
 
-      // Copy VSIX to output folder
       var vsixSource = $"{Solution.GetProject("PoorMansTSqlFormatterVSPackage2019").Path.Parent}\\bin\\{Configuration}\\PoorMansTSqlFormatterVSPackage2019.vsix";
+
+      // Get MD5 hash of VSIX for Chocolatey
+      var vsixHashfile = OutputDirectory / "PoorMansTSqlFormatterVSPackage2019.vsix.hash";      
+      using (System.IO.StreamWriter file = new System.IO.StreamWriter(vsixHashfile))
+      {
+        file.WriteLine(GetFileHash(vsixSource));
+      }
+
+      // Copy VSIX to output folder      
       CopyFileToDirectory(vsixSource, OutputDirectory);
     });
 
