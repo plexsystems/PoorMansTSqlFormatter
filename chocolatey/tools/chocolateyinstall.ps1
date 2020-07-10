@@ -2,8 +2,10 @@
 $ErrorActionPreference = 'Stop'; # stop on all errors
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $fileLocation = Join-Path $toolsDir 'PoorMansTSqlFormatterSSMSPackage.Setup.msi'
-$checksumPath = Join-Path $toolsDir 'PoorMansTSqlFormatterSSMSPackage.Setup.msi.hash'
-$msichecksum = [IO.File]::ReadAllText($checksumPath)
+$checksumPathMsi = Join-Path $toolsDir 'PoorMansTSqlFormatterSSMSPackage.Setup.msi.hash'
+$msichecksum = [IO.File]::ReadAllText($checksumPathMsi)
+# $checksumPathVsix = Join-Path $toolsDir 'PoorMansTSqlFormatterVSPackage2019.vsix.hash'
+# $vsixChecksum = [IO.File]::ReadAllText($checksumPathVsix)
 
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
@@ -18,12 +20,16 @@ $packageArgs = @{
 }
 Install-ChocolateyInstallPackage @packageArgs # https://chocolatey.org/docs/helpers-install-chocolatey-install-package
 
-$vsix     = Join-Path $toolsDir 'PoorMansTSqlFormatterVSPackage2019.vsix'
-# The Install-ChocolateyVsixPackage cmdlet below can't ever seem to locate the install location so we're punting to a "known" path for the *2019* VsixInstaller.exe for now
+. .\tools\Get-VisualStudioVsixInstaller.ps1
+. .\tools\Get-WillowInstalledProducts.ps1
+$vsixInstaller = Get-VisualStudioVsixInstaller -Latest
+Write-Verbose ('Found VSIXInstaller version {0}: {1}' -f $vsixInstaller.Version, $vsixInstaller.Path)
+$installer = $vsixInstaller.Path
+
+$vsix = Join-Path $toolsDir 'PoorMansTSqlFormatterVSPackage2019.vsix'
+# The Install-ChocolateyVsixPackage cmdlet below can't ever seem to locate the install location so we're punting with the function above to locate vsixInstaller
 # Install-ChocolateyVsixPackage -PackageName "PoorMansTSqlFormatterVSPackage2019" $vsix -VsVersion 16
-$installer = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\VSIXInstaller.exe"
-# $exitCode = Install-Vsix "$installer" "$vsix"
-$exitCode = Write-Host "Installing $vsix using $installer"
+$exitCode = Write-Host "Installing $vsix using $installer" 
 $psi = New-Object System.Diagnostics.ProcessStartInfo
 $psi.FileName=$installer
 $psi.Arguments= $vsix
