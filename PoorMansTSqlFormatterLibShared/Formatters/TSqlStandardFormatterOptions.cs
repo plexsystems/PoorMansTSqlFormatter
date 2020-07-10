@@ -90,34 +90,44 @@ namespace PoorMansTSqlFormatterLib.Formatters
 		//PLEASE NOTE: This is not reusable/general-purpose key-value serialization: it does not handle commas in data.
 		// This will need to be enhanced if we ever need to store formatter options that might contain equals signs or 
 		// commas.
-		public string ToSerializedString()
-        { 
-            var overrides = new Dictionary<string, string>();
+    public string ToSerializedString()
+    {
+      var overrides = new Dictionary<string, string>();
 
-            if (IndentString != _defaultOptions.IndentString) overrides.Add("IndentString", IndentString);
-            if (SpacesPerTab != _defaultOptions.SpacesPerTab) overrides.Add("SpacesPerTab", SpacesPerTab.ToString());
-            if (MaxLineWidth != _defaultOptions.MaxLineWidth) overrides.Add("MaxLineWidth", MaxLineWidth.ToString());
-            if (ExpandCommaLists != _defaultOptions.ExpandCommaLists) overrides.Add("ExpandCommaLists", ExpandCommaLists.ToString());
-            if (TrailingCommas != _defaultOptions.TrailingCommas) overrides.Add("TrailingCommas", TrailingCommas.ToString());
-            if (SpaceAfterExpandedComma != _defaultOptions.SpaceAfterExpandedComma) overrides.Add("SpaceAfterExpandedComma", SpaceAfterExpandedComma.ToString());
-            if (ExpandBooleanExpressions != _defaultOptions.ExpandBooleanExpressions) overrides.Add("ExpandBooleanExpressions", ExpandBooleanExpressions.ToString());
-            if (ExpandBetweenConditions != _defaultOptions.ExpandBetweenConditions) overrides.Add("ExpandBetweenConditions", ExpandBetweenConditions.ToString());
-            if (ExpandCaseStatements != _defaultOptions.ExpandCaseStatements) overrides.Add("ExpandCaseStatements", ExpandCaseStatements.ToString());
-            if (UppercaseKeywords != _defaultOptions.UppercaseKeywords) overrides.Add("UppercaseKeywords", UppercaseKeywords.ToString());
-            if (BreakJoinOnSections != _defaultOptions.BreakJoinOnSections) overrides.Add("BreakJoinOnSections", BreakJoinOnSections.ToString());
-            if (HTMLColoring != _defaultOptions.HTMLColoring) overrides.Add("HTMLColoring", HTMLColoring.ToString());
-			if (KeywordStandardization != _defaultOptions.KeywordStandardization) overrides.Add("KeywordStandardization", KeywordStandardization.ToString());
-			if (ExpandInLists != _defaultOptions.ExpandInLists) overrides.Add("ExpandInLists", ExpandInLists.ToString());
-			if (NewClauseLineBreaks != _defaultOptions.NewClauseLineBreaks) overrides.Add("NewClauseLineBreaks", NewClauseLineBreaks.ToString());
-			if (NewStatementLineBreaks != _defaultOptions.NewStatementLineBreaks) overrides.Add("NewStatementLineBreaks", NewStatementLineBreaks.ToString());
-			NewStatementLineBreaks = 2;
-    
-            if (overrides.Count == 0) return string.Empty;
-            return string.Join(",", overrides.Select((kvp) => kvp.Key + "=" + kvp.Value).ToArray());
-           
-        }
+      if (IndentString != _defaultOptions.IndentString) overrides.Add("IndentString", IndentString);
+      if (SpacesPerTab != _defaultOptions.SpacesPerTab) overrides.Add("SpacesPerTab", SpacesPerTab.ToString());
+      if (MaxLineWidth != _defaultOptions.MaxLineWidth) overrides.Add("MaxLineWidth", MaxLineWidth.ToString());
+      if (ExpandCommaLists != _defaultOptions.ExpandCommaLists)
+        overrides.Add("ExpandCommaLists", ExpandCommaLists.ToString());
+      if (TrailingCommas != _defaultOptions.TrailingCommas) overrides.Add("TrailingCommas", TrailingCommas.ToString());
+      if (SpaceAfterExpandedComma != _defaultOptions.SpaceAfterExpandedComma)
+        overrides.Add("SpaceAfterExpandedComma", SpaceAfterExpandedComma.ToString());
+      if (ExpandBooleanExpressions != _defaultOptions.ExpandBooleanExpressions)
+        overrides.Add("ExpandBooleanExpressions", ExpandBooleanExpressions.ToString());
+      if (ExpandBetweenConditions != _defaultOptions.ExpandBetweenConditions)
+        overrides.Add("ExpandBetweenConditions", ExpandBetweenConditions.ToString());
+      if (ExpandCaseStatements != _defaultOptions.ExpandCaseStatements)
+        overrides.Add("ExpandCaseStatements", ExpandCaseStatements.ToString());
+      if (UppercaseKeywords != _defaultOptions.UppercaseKeywords)
+        overrides.Add("UppercaseKeywords", UppercaseKeywords.ToString());
+      if (BreakJoinOnSections != _defaultOptions.BreakJoinOnSections)
+        overrides.Add("BreakJoinOnSections", BreakJoinOnSections.ToString());
+      if (HTMLColoring != _defaultOptions.HTMLColoring) overrides.Add("HTMLColoring", HTMLColoring.ToString());
+      if (KeywordStandardization != _defaultOptions.KeywordStandardization)
+        overrides.Add("KeywordStandardization", KeywordStandardization.ToString());
+      if (ExpandInLists != _defaultOptions.ExpandInLists) overrides.Add("ExpandInLists", ExpandInLists.ToString());
+      if (NewClauseLineBreaks != _defaultOptions.NewClauseLineBreaks)
+        overrides.Add("NewClauseLineBreaks", NewClauseLineBreaks.ToString());
+      if (NewStatementLineBreaks != _defaultOptions.NewStatementLineBreaks)
+        overrides.Add("NewStatementLineBreaks", NewStatementLineBreaks.ToString());
+      NewStatementLineBreaks = 2;
 
-        private string _indentString;
+      if (overrides.Count == 0) return string.Empty;
+      return string.Join(",", overrides.Select((kvp) => kvp.Key + "=" + kvp.Value).ToArray());
+
+    }
+
+    private string _indentString;
         public string IndentString
         {
             get

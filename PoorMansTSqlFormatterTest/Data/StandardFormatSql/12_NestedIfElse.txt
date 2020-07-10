@@ -1,9 +1,17 @@
-﻿IF @OuterIfCondition = 1
-	IF @InnerIfCondition = 2
-		SET @InnerIfStatement = 3
-	ELSE IF @SecondInnerIfCondition = 4
-		SET @InnerSecondIfStatement = 5
-	ELSE
-		SET @InnerElseStatement = 6
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+IF @OuterIfCondition = 1
+BEGIN
+  IF @InnerIfCondition = 2
+  BEGIN
+    SET @InnerIfStatement = 3
+  END
+  ELSE IF @SecondInnerIfCondition = 4
+  BEGIN
+    SET @InnerSecondIfStatement = 5
+  END
+  ELSE
+    SET @InnerElseStatement = 6
+END
 ELSE
-	SET @OuterElseStatement = 7
+  SET @OuterElseStatement = 7;

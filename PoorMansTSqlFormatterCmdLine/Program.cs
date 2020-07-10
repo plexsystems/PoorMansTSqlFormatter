@@ -42,23 +42,24 @@ namespace PoorMansTSqlFormatterCmdLine
         {
             //formatter engine option defaults
             var options = new PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatterOptions
-                {
-                    KeywordStandardization = true,
-                    IndentString = "\t",
-                    SpacesPerTab = 4,
-					MaxLineWidth = 999,
-					NewStatementLineBreaks = 2,
-					NewClauseLineBreaks = 1,
-					TrailingCommas = false,
-                    SpaceAfterExpandedComma = false,
-                    ExpandBetweenConditions = true,
-                    ExpandBooleanExpressions = true,
-                    ExpandCaseStatements = true,
-                    ExpandCommaLists = true,
-                    BreakJoinOnSections = false,
-                    UppercaseKeywords = true,
-					ExpandInLists = true
-                };
+            {
+              KeywordStandardization = true,
+              //IndentString = "\t",
+              IndentString = new String(' ', 2),
+              SpacesPerTab = 4,
+              MaxLineWidth = 999,
+              NewStatementLineBreaks = 2,
+              NewClauseLineBreaks = 1,
+              TrailingCommas = true,
+              SpaceAfterExpandedComma = false,
+              ExpandBetweenConditions = true,
+              ExpandBooleanExpressions = true,
+              ExpandCaseStatements = true,
+              ExpandCommaLists = true,
+              BreakJoinOnSections = false,
+              UppercaseKeywords = true,
+              ExpandInLists = true
+            };
             
             //bulk formatter options
             bool allowParsingErrors = false;
