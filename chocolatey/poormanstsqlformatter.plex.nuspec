@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>poormanstsqlformatter.plex</id>    
+    <version>1.6.16</version>
+    <title>PoorMansTSqlFormatter for Plex (Install)</title>
+    <authors>Plex Systems</authors>
+    <projectUrl>https://github.com/plexsystems/PoorMansTSqlFormatter</projectUrl>    
+    <tags>poormanstsqlformatter.plex linter sql tsql</tags>
+    <summary>Poor Man's SQL Formatter Plex Edition</summary>
+    <description>A Plex specific implementation of the Poor Man's SQL Formatter</description>    
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+    <file src="..\output\PoorMansTSqlFormatterSSMSPackage.Setup.msi" target="tools" />
+    <file src="..\output\PoorMansTSqlFormatterSSMSPackage.Setup.msi.hash" target="tools" />
+    <file src="..\output\PoorMansTSqlFormatterVSPackage2019.vsix" target="tools" />
+    <file src="..\output\PoorMansTSqlFormatterVSPackage2019.vsix.hash" target="tools" />
+  </files>
+</package>
