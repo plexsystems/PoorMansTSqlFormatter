@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using PoorMansTSqlFormatterLib.Interfaces;
 using PoorMansTSqlFormatterLib.ParseStructure;
@@ -159,6 +160,11 @@ namespace PoorMansTSqlFormatterLib.Formatters
         private void ProcessSqlNode(Node contentElement, TSqlStandardFormattingState state)
         {
             int initialIndent = state.IndentLevel;
+            if (contentElement.TextValue.Equals("DATEADD"))
+            {
+              Console.Write("");
+            }
+            
 
             if (contentElement.GetAttributeValue(SqlStructureConstants.ANAME_HASERROR) == "1")
                 state.OpenClass(SqlHtmlConstants.CLASS_ERRORHIGHLIGHT);
@@ -562,6 +568,13 @@ namespace PoorMansTSqlFormatterLib.Formatters
                                 break;
                               }
                               break;
+                            case SqlStructureConstants.ENAME_FUNCTION_PARENS: // This stops the inline functions from getting a line break
+                              switch (contentElement.Name)
+                              {
+                                case SqlStructureConstants.ENAME_EXPRESSION_PARENS:
+                                  break;
+                              }
+                              break;
                             default:
                               state.AddOutputLineBreak();
                               state.Indent(state.IndentLevel);
@@ -615,11 +628,6 @@ namespace PoorMansTSqlFormatterLib.Formatters
 
                     // Close parenthesis 
                     state.AddOutputContent(FormatOperator(")"), SqlHtmlConstants.CLASS_OPERATOR);
-                    // if (recentKey == "WITH")
-                    //{
-                    //  state.AddOutputLineBreak();
-                    //  state.Indent(state.IndentLevel);
-                    //}
                     state.WordSeparatorExpected = true;
                     if (indentAfter && initialIndent != state.IndentLevel) // New
                     {
