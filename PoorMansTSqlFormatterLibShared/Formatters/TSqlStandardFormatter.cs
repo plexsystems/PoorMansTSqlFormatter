@@ -825,14 +825,14 @@ namespace PoorMansTSqlFormatterLib.Formatters
                             break;
                           default:
                             state.AddOutputContent(formattedOutput, SqlHtmlConstants.CLASS_COMMENT);
-                            state.BreakExpected = true;
-                            state.SourceBreakPending = true;
+                            // GRZ state.BreakExpected = true;
+                            // GRZ state.SourceBreakPending = true;
                             break;
                         }
                         break;
                       default:
                         state.AddOutputContent(formattedOutput, SqlHtmlConstants.CLASS_COMMENT);
-                        state.BreakExpected = true;
+                        // GRZ state.BreakExpected = true;
                         state.SourceBreakPending = true;
                         break;
                     } // New end
@@ -1068,7 +1068,10 @@ namespace PoorMansTSqlFormatterLib.Formatters
                     {
                       if (contentElement.PreviousSibling().Name.Equals(SqlStructureConstants.ENAME_COMMENT_SINGLELINE) && state.SourceBreakPending)
                       {
+                        // TODO: If this is a single line comment not at position zero - we get 2 line breaks
                         state.AddOutputLineBreak();
+                        state.SourceBreakPending = false;
+                        // state.BreakExpected = false;
                       }
                     }
                     break;
