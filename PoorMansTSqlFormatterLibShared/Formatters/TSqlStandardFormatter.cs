@@ -160,12 +160,7 @@ namespace PoorMansTSqlFormatterLib.Formatters
         private void ProcessSqlNode(Node contentElement, TSqlStandardFormattingState state)
         {
             int initialIndent = state.IndentLevel;
-            if (contentElement.TextValue.Equals("DATEADD"))
-            {
-              Console.Write("");
-            }
             
-
             if (contentElement.GetAttributeValue(SqlStructureConstants.ANAME_HASERROR) == "1")
                 state.OpenClass(SqlHtmlConstants.CLASS_ERRORHIGHLIGHT);
             bool addOutputSpace = true; // New
