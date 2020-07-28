@@ -34,7 +34,7 @@ namespace PoorMansTSqlFormatterLib
             Instance.Add("LEFT OUTER JOIN", "LEFT JOIN");
             Instance.Add("RIGHT OUTER JOIN", "RIGHT JOIN");
             Instance.Add("FULL OUTER JOIN", "FULL JOIN");
-            //Instance.Add("INNER JOIN", "JOIN");
+            Instance.Add("INNER JOIN", "JOIN");
             Instance.Add("TRANSACTION", "TRAN");
             Instance.Add("BEGIN TRANSACTION", "BEGIN TRAN");
             Instance.Add("COMMIT TRANSACTION", "COMMIT TRAN");
