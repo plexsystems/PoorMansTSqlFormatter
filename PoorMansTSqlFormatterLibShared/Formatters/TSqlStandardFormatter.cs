@@ -764,13 +764,11 @@ namespace PoorMansTSqlFormatterLib.Formatters
 
                     if (state.SpecialRegionActive == null && contentElement.TextValue.ToUpperInvariant().Contains("[NOFORMAT]"))
                     {
-                        //state.AddOutputLineBreak();
                         state.SpecialRegionActive = SpecialRegionType.NoFormat;
                         state.RegionStartNode = contentElement;
                     }
                     else if (state.SpecialRegionActive == null && contentElement.TextValue.ToUpperInvariant().Contains("[MINIFY]"))
                     {
-                        //state.AddOutputLineBreak();
                         state.SpecialRegionActive = SpecialRegionType.Minify;
                         state.RegionStartNode = contentElement;
                     }
@@ -833,14 +831,11 @@ namespace PoorMansTSqlFormatterLib.Formatters
                             break;
                           default:
                             state.AddOutputContent(formattedOutput, SqlHtmlConstants.CLASS_COMMENT);
-                            // GRZ state.BreakExpected = true;
-                            // GRZ state.SourceBreakPending = true;
                             break;
                         }
                         break;
                       default:
                         state.AddOutputContent(formattedOutput, SqlHtmlConstants.CLASS_COMMENT);
-                        // GRZ state.BreakExpected = true;
                         state.SourceBreakPending = true;
                         break;
                     } // New end
@@ -1079,7 +1074,7 @@ namespace PoorMansTSqlFormatterLib.Formatters
                         // TODO: If this is a single line comment not at position zero - we get 2 line breaks
                         state.AddOutputLineBreak();
                         state.SourceBreakPending = false;
-                        // state.BreakExpected = false;
+                        state.Indent(state.IndentLevel);
                       }
                     }
                     break;
