@@ -564,11 +564,7 @@ namespace PoorMansTSqlFormatterLib.Formatters
                               }
                               break;
                             case SqlStructureConstants.ENAME_FUNCTION_PARENS: // This stops the inline functions from getting a line break
-                              switch (contentElement.Name)
-                              {
-                                case SqlStructureConstants.ENAME_EXPRESSION_PARENS:
-                                  break;
-                              }
+                              // Dump out here so the default logic below does not execute
                               break;
                             default:
                               state.AddOutputLineBreak();
